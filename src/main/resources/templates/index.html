@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="ISO-8859-1">
+<title>Welcome App</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
+	crossorigin="anonymous">
+</head>
+<body>
+	<div class="container">
+		<div class="row m-5">
+			<div class="col">
+				<nav class="navbar navbar-expand-lg navbar-light bg-light">
+					<div class="container-fluid">
+						<a class="navbar-brand" href="#">MENU :</a>
+						<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+							<div class="navbar-nav">
+								<a class="nav-link" href="/newfile">ADD NEW FILE</a>
+								<a class="nav-link"	href="#" sec:authorize="hasAnyAuthority('MODERATOR', 'ADMIN')">MENU_MODERATOR</a>
+								<a class="nav-link" href="#" sec:authorize="hasAuthority('ADMIN')">MENU_ADMIN</a>
+								<a class="nav-link text-danger bg-light" th:href="@{/logout}">LOGOUT</a>
+							</div>
+						</div>
+					</div>
+				</nav>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<h3>
+					<div sec:authorize="isAuthenticated()">
+						Welcome <b><span sec:authentication="name">Username</span></b>
+						&nbsp; <i><span sec:authentication="principal.authorities">Roles</span></i>
+					</div>
+				</h3>
+				<table class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Name</th>
+							<th scope="col">User</th>
+							<th scope="col">Features</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="data : ${lists}">
+							<td th:text="${data.dataId}">ID</td>
+							<td th:text="${data.dataName}">Name</td>
+							<td th:text="${data.user.uName}">uName</td>
+							<td align="center">
+								<a th:href="@{'/delete/' + ${data.dataId}}">Delete</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
